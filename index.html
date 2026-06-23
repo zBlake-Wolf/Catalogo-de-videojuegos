@@ -8,8 +8,7 @@
         :root {
             --bg: #120d08;
             --phone: #17100a;
-            --panel: rgba(43, 31, 19, 0.82);
-            --panel-light: rgba(255, 226, 159, 0.10);
+            --panel: rgba(43, 31, 19, 0.84);
             --text: #fff8e8;
             --muted: #d4be95;
             --gold: #ffc75b;
@@ -78,14 +77,21 @@
             scrollbar-width: none;
         }
 
-        .screen::-webkit-scrollbar {
+        .screen::-webkit-scrollbar,
+        .chips::-webkit-scrollbar {
             display: none;
         }
 
-        .topbar {
+        .topbar,
+        .section-title,
+        .meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar {
             margin-bottom: 18px;
         }
 
@@ -107,6 +113,7 @@
             box-shadow: 0 0 24px rgba(147, 243, 109, 0.35);
         }
 
+        .muted,
         .brand small,
         .section-title span,
         .card p,
@@ -156,7 +163,8 @@
             min-height: 206px;
         }
 
-        .chip-main {
+        .chip-main,
+        .platform {
             width: fit-content;
             color: #241507;
             background: var(--gold);
@@ -164,14 +172,12 @@
             padding: 7px 11px;
             font-size: 12px;
             font-weight: bold;
-            margin-bottom: 12px;
         }
 
         h1 {
             font-size: 46px;
             line-height: 0.95;
-            letter-spacing: 0;
-            margin-bottom: 10px;
+            margin: 12px 0 10px;
         }
 
         .hero p {
@@ -211,10 +217,6 @@
             overflow-x: auto;
             padding-bottom: 6px;
             scrollbar-width: none;
-        }
-
-        .chips::-webkit-scrollbar {
-            display: none;
         }
 
         .chip {
@@ -260,9 +262,7 @@
         }
 
         .section-title {
-            display: flex;
             align-items: end;
-            justify-content: space-between;
             margin-bottom: 14px;
         }
 
@@ -277,7 +277,7 @@
 
         .card {
             display: grid;
-            grid-template-columns: 82px 1fr;
+            grid-template-columns: 92px 1fr;
             gap: 14px;
             align-items: center;
             border: 1px solid var(--line);
@@ -285,7 +285,7 @@
             padding: 13px;
             background: linear-gradient(135deg, var(--panel), rgba(255, 255, 255, 0.055));
             box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
-            animation: floatIn 0.55s ease both;
+            animation: floatIn 0.45s ease both;
             transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
         }
 
@@ -296,7 +296,9 @@
         }
 
         .cover {
-            height: 82px;
+            height: 92px;
+            position: relative;
+            overflow: hidden;
             border-radius: 20px;
             display: grid;
             place-items: center;
@@ -304,6 +306,20 @@
             background:
                 linear-gradient(140deg, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0.18)),
                 repeating-linear-gradient(45deg, #f6c76a 0 18px, #b87934 18px 36px);
+        }
+
+        .cover img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .cover span {
+            position: relative;
+            z-index: 0;
         }
 
         .card h3 {
@@ -317,26 +333,33 @@
             margin-bottom: 9px;
         }
 
-        .meta {
+        .tags {
             display: flex;
-            justify-content: space-between;
-            gap: 8px;
-            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
         }
 
-        .platform {
-            color: #201407;
-            background: var(--gold);
+        .tag {
+            border: 1px solid rgba(255, 216, 142, 0.22);
             border-radius: 999px;
-            padding: 6px 9px;
-            font-size: 12px;
-            font-weight: bold;
+            padding: 5px 8px;
+            color: #ffd98c;
+            background: rgba(255, 199, 91, 0.08);
+            font-size: 11px;
         }
 
         .level {
             color: var(--green);
             font-size: 12px;
             font-weight: bold;
+        }
+
+        .loader {
+            margin: 18px auto 0;
+            width: fit-content;
+            color: var(--muted);
+            font-size: 13px;
         }
 
         .bottom-nav {
@@ -404,13 +427,13 @@
 </head>
 <body>
     <main class="phone">
-        <section class="screen">
+        <section class="screen" id="screen">
             <div class="topbar">
                 <div class="brand">
                     <div class="orb">X</div>
                     <div>
                         <strong>Backrooms Arcade</strong><br>
-                        <small>Catalogo futurista</small>
+                        <small>Catalogo infinito</small>
                     </div>
                 </div>
                 <button class="icon-btn">⌁</button>
@@ -420,173 +443,137 @@
                 <div class="hero-content">
                     <span class="chip-main">Nivel destacado</span>
                     <h1>Lost Rooms</h1>
-                    <p>Explora una app de juegos con pasillos infinitos, brillo calido y estilo moderno tipo consola.</p>
+                    <p>Explora una app de juegos con pasillos infinitos, etiquetas y tarjetas listas para tus imagenes.</p>
                 </div>
             </section>
 
             <label class="search">
                 <span>⌕</span>
-                <input id="search" type="text" placeholder="Buscar juego o plataforma">
+                <input id="search" type="text" placeholder="Buscar juego, plataforma o etiqueta">
             </label>
 
-            <div class="chips">
+            <div class="chips" id="chips">
                 <button class="chip active" data-filter="todos">Todos</button>
+                <button class="chip" data-filter="Terror">Terror</button>
+                <button class="chip" data-filter="Exploracion">Exploracion</button>
+                <button class="chip" data-filter="Puzzle">Puzzle</button>
+                <button class="chip" data-filter="Multijugador">Multijugador</button>
                 <button class="chip" data-filter="PC">PC</button>
                 <button class="chip" data-filter="Xbox">Xbox</button>
-                <button class="chip" data-filter="PlayStation">PlayStation</button>
-                <button class="chip" data-filter="Mobile">Mobile</button>
             </div>
 
             <section class="stats">
-                <article class="stat"><strong>10</strong><span>juegos</span></article>
-                <article class="stat"><strong>5</strong><span>plataformas</span></article>
-                <article class="stat"><strong>∞</strong><span>niveles</span></article>
+                <article class="stat"><strong id="count">10</strong><span>visibles</span></article>
+                <article class="stat"><strong>∞</strong><span>scroll</span></article>
+                <article class="stat"><strong>10</strong><span>base</span></article>
             </section>
 
             <div class="section-title">
                 <div>
-                    <h2>Para jugar ahora</h2>
-                    <span>Seleccion Backrooms</span>
+                    <h2>Catalogo infinito</h2>
+                    <span>Las tarjetas se cargan al bajar</span>
                 </div>
-                <span id="count">10</span>
+                <span class="muted">v2</span>
             </div>
 
-            <section class="grid" id="grid">
-                <article class="card" data-platform="PC" data-name="Escape the Backrooms">
-                    <div class="cover">🟨</div>
-                    <div>
-                        <h3>Escape the Backrooms</h3>
-                        <p>Pasillos amarillos, rutas secretas y una salida casi imposible.</p>
-                        <div class="meta"><span class="platform">PC</span><span class="level">Nivel 0</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="Xbox" data-name="Inside the Rooms">
-                    <div class="cover">🚪</div>
-                    <div>
-                        <h3>Inside the Rooms</h3>
-                        <p>Habitaciones repetidas con pistas ocultas y ambiente misterioso.</p>
-                        <div class="meta"><span class="platform">Xbox</span><span class="level">Nivel 1</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="PlayStation" data-name="VHS Hallways">
-                    <div class="cover">📼</div>
-                    <div>
-                        <h3>VHS Hallways</h3>
-                        <p>Exploracion con efecto cinta antigua y luces fluorescentes.</p>
-                        <div class="meta"><span class="platform">PlayStation</span><span class="level">Nivel 2</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="Xbox" data-name="Fluorescent Maze">
-                    <div class="cover">💡</div>
-                    <div>
-                        <h3>Fluorescent Maze</h3>
-                        <p>Laberintos calidos con paredes que parecen cambiar de lugar.</p>
-                        <div class="meta"><span class="platform">Xbox</span><span class="level">Nivel 3</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="PC" data-name="Level Elevator">
-                    <div class="cover">🛗</div>
-                    <div>
-                        <h3>Level Elevator</h3>
-                        <p>Sube por niveles nuevos y desbloquea puertas imposibles.</p>
-                        <div class="meta"><span class="platform">PC</span><span class="level">Nivel 4</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="Xbox" data-name="No Clip Runner">
-                    <div class="cover">🧭</div>
-                    <div>
-                        <h3>No Clip Runner</h3>
-                        <p>Corre contra el tiempo atravesando zonas fuera de la realidad.</p>
-                        <div class="meta"><span class="platform">Xbox</span><span class="level">Nivel 5</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="Mobile" data-name="Warm Liminal">
-                    <div class="cover">🟧</div>
-                    <div>
-                        <h3>Warm Liminal</h3>
-                        <p>Salas vacias, color dorado y sonidos suaves de fondo.</p>
-                        <div class="meta"><span class="platform">Mobile</span><span class="level">Nivel 6</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="PC" data-name="Hotel Endless">
-                    <div class="cover">🕯️</div>
-                    <div>
-                        <h3>Hotel Endless</h3>
-                        <p>Un hotel infinito con alfombras viejas y pasillos elegantes.</p>
-                        <div class="meta"><span class="platform">PC</span><span class="level">Nivel 7</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="PlayStation" data-name="Signal Lost">
-                    <div class="cover">📡</div>
-                    <div>
-                        <h3>Signal Lost</h3>
-                        <p>Busca senales de radio para encontrar rutas escondidas.</p>
-                        <div class="meta"><span class="platform">PlayStation</span><span class="level">Nivel 8</span></div>
-                    </div>
-                </article>
-
-                <article class="card" data-platform="Xbox" data-name="The Last Exit">
-                    <div class="cover">🕳️</div>
-                    <div>
-                        <h3>The Last Exit</h3>
-                        <p>La ultima salida esta cerca, pero el mapa ya no responde.</p>
-                        <div class="meta"><span class="platform">Xbox</span><span class="level">Final</span></div>
-                    </div>
-                </article>
-            </section>
+            <section class="grid" id="grid"></section>
+            <p class="loader" id="loader">Baja para cargar mas juegos...</p>
         </section>
 
         <nav class="bottom-nav">
             <button class="nav-item active">Inicio</button>
             <button class="nav-item">Buscar</button>
-            <button class="nav-item">Niveles</button>
+            <button class="nav-item">Tags</button>
             <button class="nav-item">Perfil</button>
         </nav>
     </main>
 
     <script>
+        // Para agregar tus imagenes: guarda archivos en la carpeta "imagenes"
+        // y cambia el valor de imagen. Ejemplo: imagen: "imagenes/mi-juego.jpg"
+        const juegos = [
+            { titulo: 'Escape the Backrooms', plataforma: 'PC', nivel: 'Nivel 0', icono: '🟨', imagen: 'imagenes/escape-backrooms.jpg', descripcion: 'Pasillos amarillos, rutas secretas y una salida casi imposible.', etiquetas: ['Terror', 'Exploracion'] },
+            { titulo: 'Inside the Rooms', plataforma: 'Xbox', nivel: 'Nivel 1', icono: '🚪', imagen: 'imagenes/inside-rooms.jpg', descripcion: 'Habitaciones repetidas con pistas ocultas y ambiente misterioso.', etiquetas: ['Terror', 'Puzzle'] },
+            { titulo: 'VHS Hallways', plataforma: 'PlayStation', nivel: 'Nivel 2', icono: '📼', imagen: 'imagenes/vhs-hallways.jpg', descripcion: 'Exploracion con efecto cinta antigua y luces fluorescentes.', etiquetas: ['Terror', 'Retro'] },
+            { titulo: 'Fluorescent Maze', plataforma: 'Xbox', nivel: 'Nivel 3', icono: '💡', imagen: 'imagenes/fluorescent-maze.jpg', descripcion: 'Laberintos calidos con paredes que parecen cambiar de lugar.', etiquetas: ['Puzzle', 'Exploracion'] },
+            { titulo: 'Level Elevator', plataforma: 'PC', nivel: 'Nivel 4', icono: '🛗', imagen: 'imagenes/level-elevator.jpg', descripcion: 'Sube por niveles nuevos y desbloquea puertas imposibles.', etiquetas: ['Puzzle', 'Aventura'] },
+            { titulo: 'No Clip Runner', plataforma: 'Xbox', nivel: 'Nivel 5', icono: '🧭', imagen: 'imagenes/no-clip-runner.jpg', descripcion: 'Corre contra el tiempo atravesando zonas fuera de la realidad.', etiquetas: ['Accion', 'Multijugador'] },
+            { titulo: 'Warm Liminal', plataforma: 'Mobile', nivel: 'Nivel 6', icono: '🟧', imagen: 'imagenes/warm-liminal.jpg', descripcion: 'Salas vacias, color dorado y sonidos suaves de fondo.', etiquetas: ['Exploracion', 'Relax'] },
+            { titulo: 'Hotel Endless', plataforma: 'PC', nivel: 'Nivel 7', icono: '🕯️', imagen: 'imagenes/hotel-endless.jpg', descripcion: 'Un hotel infinito con alfombras viejas y pasillos elegantes.', etiquetas: ['Terror', 'Aventura'] },
+            { titulo: 'Signal Lost', plataforma: 'PlayStation', nivel: 'Nivel 8', icono: '📡', imagen: 'imagenes/signal-lost.jpg', descripcion: 'Busca senales de radio para encontrar rutas escondidas.', etiquetas: ['Puzzle', 'Exploracion'] },
+            { titulo: 'The Last Exit', plataforma: 'Xbox', nivel: 'Final', icono: '🕳️', imagen: 'imagenes/the-last-exit.jpg', descripcion: 'La ultima salida esta cerca, pero el mapa ya no responde.', etiquetas: ['Terror', 'Multijugador'] }
+        ];
+
+        const screen = document.querySelector('#screen');
+        const grid = document.querySelector('#grid');
         const search = document.querySelector('#search');
         const chips = document.querySelectorAll('.chip');
-        const cards = document.querySelectorAll('.card');
         const count = document.querySelector('#count');
-        let activeFilter = 'todos';
+        let filtroActivo = 'todos';
+        let pagina = 0;
+        const porPagina = 10;
 
-        function updateCards() {
-            const text = search.value.toLowerCase();
-            let visible = 0;
+        function crearTarjeta(juego, vuelta) {
+            const tags = juego.etiquetas.map(tag => `<span class="tag">${tag}</span>`).join('');
+            return `
+                <article class="card" data-platform="${juego.plataforma}" data-tags="${juego.etiquetas.join(' ')}" data-name="${juego.titulo}">
+                    <div class="cover">
+                        <img src="${juego.imagen}" alt="${juego.titulo}" onerror="this.remove()">
+                        <span>${juego.icono}</span>
+                    </div>
+                    <div>
+                        <h3>${juego.titulo}</h3>
+                        <p>${juego.descripcion}</p>
+                        <div class="tags">${tags}</div>
+                        <div class="meta"><span class="platform">${juego.plataforma}</span><span class="level">${juego.nivel} · Loop ${vuelta}</span></div>
+                    </div>
+                </article>`;
+        }
 
-            cards.forEach(card => {
-                const name = card.dataset.name.toLowerCase();
-                const platform = card.dataset.platform;
-                const matchesText = name.includes(text) || platform.toLowerCase().includes(text);
-                const matchesFilter = activeFilter === 'todos' || platform === activeFilter;
-                const show = matchesText && matchesFilter;
+        function cargarMas() {
+            const vuelta = pagina + 1;
+            const tarjetas = juegos.slice(0, porPagina).map(juego => crearTarjeta(juego, vuelta)).join('');
+            grid.insertAdjacentHTML('beforeend', tarjetas);
+            pagina++;
+            filtrarTarjetas();
+        }
 
-                card.style.display = show ? 'grid' : 'none';
-                if (show) visible++;
+        function filtrarTarjetas() {
+            const texto = search.value.toLowerCase();
+            const tarjetas = document.querySelectorAll('.card');
+            let visibles = 0;
+
+            tarjetas.forEach(card => {
+                const nombre = card.dataset.name.toLowerCase();
+                const plataforma = card.dataset.platform.toLowerCase();
+                const tags = card.dataset.tags.toLowerCase();
+                const coincideTexto = nombre.includes(texto) || plataforma.includes(texto) || tags.includes(texto);
+                const coincideFiltro = filtroActivo === 'todos' || card.dataset.platform === filtroActivo || card.dataset.tags.includes(filtroActivo);
+                const mostrar = coincideTexto && coincideFiltro;
+
+                card.style.display = mostrar ? 'grid' : 'none';
+                if (mostrar) visibles++;
             });
 
-            count.textContent = visible;
+            count.textContent = visibles;
         }
 
         chips.forEach(chip => {
             chip.addEventListener('click', () => {
                 chips.forEach(item => item.classList.remove('active'));
                 chip.classList.add('active');
-                activeFilter = chip.dataset.filter;
-                updateCards();
+                filtroActivo = chip.dataset.filter;
+                filtrarTarjetas();
             });
         });
 
-        search.addEventListener('input', updateCards);
+        screen.addEventListener('scroll', () => {
+            const cercaDelFinal = screen.scrollTop + screen.clientHeight >= screen.scrollHeight - 120;
+            if (cercaDelFinal) cargarMas();
+        });
+
+        search.addEventListener('input', filtrarTarjetas);
+        cargarMas();
     </script>
 </body>
 </html>
