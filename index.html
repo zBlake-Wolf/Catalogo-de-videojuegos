@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backrooms Game Pass</title>
+    <title>Backrooms Arcade</title>
     <style>
         :root {
-            --fondo: #130f0a;
-            --panel: #21180f;
-            --panel-2: #332617;
-            --texto: #fff8e8;
-            --suave: #d8c49d;
-            --dorado: #f3bd58;
-            --verde: #7fd36b;
-            --naranja: #d96d2f;
-            --borde: rgba(255, 216, 142, 0.18);
+            --bg: #120d08;
+            --phone: #17100a;
+            --panel: rgba(43, 31, 19, 0.82);
+            --panel-light: rgba(255, 226, 159, 0.10);
+            --text: #fff8e8;
+            --muted: #d4be95;
+            --gold: #ffc75b;
+            --orange: #ff8d4a;
+            --green: #93f36d;
+            --line: rgba(255, 216, 142, 0.18);
+            --shadow: rgba(0, 0, 0, 0.45);
         }
 
         * {
@@ -23,417 +25,568 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
-            color: var(--texto);
+            color: var(--text);
             background:
-                linear-gradient(rgba(19, 15, 10, 0.88), rgba(19, 15, 10, 0.96)),
-                repeating-linear-gradient(90deg, #2a2114 0 22px, #332817 22px 44px);
+                radial-gradient(circle at top left, rgba(255, 199, 91, 0.28), transparent 32%),
+                radial-gradient(circle at bottom right, rgba(255, 141, 74, 0.18), transparent 30%),
+                repeating-linear-gradient(90deg, rgba(255, 220, 137, 0.08) 0 1px, transparent 1px 72px),
+                linear-gradient(135deg, #120d08, #24160a 48%, #0d0b08);
+            display: grid;
+            place-items: center;
+            padding: 28px 14px;
         }
 
-        .app {
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 22px;
+        .phone {
+            width: min(100%, 430px);
+            min-height: 860px;
+            max-height: 940px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 221, 156, 0.28);
+            border-radius: 38px;
+            background:
+                linear-gradient(rgba(23, 16, 10, 0.90), rgba(23, 16, 10, 0.96)),
+                repeating-linear-gradient(0deg, #d4a44f 0 30px, #efc16a 30px 60px);
+            box-shadow: 0 30px 90px var(--shadow), inset 0 0 0 8px rgba(255, 255, 255, 0.03);
         }
 
-        nav {
+        .phone::before {
+            content: "";
+            position: absolute;
+            width: 142px;
+            height: 26px;
+            left: 50%;
+            top: 12px;
+            transform: translateX(-50%);
+            border-radius: 999px;
+            background: #080604;
+            z-index: 4;
+        }
+
+        .screen {
+            height: 100%;
+            max-height: 940px;
+            overflow-y: auto;
+            padding: 52px 18px 92px;
+            scrollbar-width: none;
+        }
+
+        .screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        .topbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 14px 0 24px;
+            margin-bottom: 18px;
         }
 
-        .logo {
+        .brand {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 20px;
-            font-weight: bold;
         }
 
-        .logo span {
-            width: 34px;
-            height: 34px;
+        .orb {
+            width: 42px;
+            height: 42px;
+            border-radius: 16px;
             display: grid;
             place-items: center;
-            border-radius: 50%;
-            background: var(--verde);
-            color: #10200c;
-            font-weight: bold;
+            color: #1a1207;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--green), var(--gold));
+            box-shadow: 0 0 24px rgba(147, 243, 109, 0.35);
         }
 
-        .menu {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .brand small,
+        .section-title span,
+        .card p,
+        .stat span {
+            color: var(--muted);
         }
 
-        .menu a {
-            color: var(--suave);
-            text-decoration: none;
-            padding: 9px 13px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.05);
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            font-size: 18px;
         }
 
         .hero {
-            min-height: 360px;
-            border: 1px solid var(--borde);
-            border-radius: 28px;
-            overflow: hidden;
             position: relative;
-            display: flex;
-            align-items: end;
-            padding: 34px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            padding: 22px;
+            min-height: 250px;
             background:
-                linear-gradient(120deg, rgba(19, 15, 10, 0.25), rgba(19, 15, 10, 0.92)),
-                repeating-linear-gradient(0deg, rgba(255, 221, 134, 0.18) 0 2px, transparent 2px 42px),
-                repeating-linear-gradient(90deg, #c89a47 0 90px, #dfb55e 90px 180px);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+                linear-gradient(140deg, rgba(255, 199, 91, 0.22), rgba(16, 11, 7, 0.30)),
+                repeating-linear-gradient(90deg, rgba(255, 235, 174, 0.12) 0 2px, transparent 2px 38px),
+                repeating-linear-gradient(0deg, #b88235 0 44px, #d9a852 44px 88px);
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.28);
         }
 
-        .hero::before {
+        .hero::after {
             content: "";
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(circle at 18% 30%, rgba(255, 247, 196, 0.55), transparent 18%),
-                radial-gradient(circle at 70% 18%, rgba(255, 222, 117, 0.28), transparent 22%),
-                linear-gradient(90deg, transparent 0 18%, rgba(50, 38, 22, 0.5) 18% 19%, transparent 19% 52%, rgba(50, 38, 22, 0.5) 52% 53%, transparent 53%);
+                linear-gradient(90deg, transparent 0 32%, rgba(24, 16, 9, 0.72) 32% 34%, transparent 34% 64%, rgba(24, 16, 9, 0.54) 64% 65%, transparent 65%),
+                radial-gradient(circle at 78% 18%, rgba(255, 244, 205, 0.45), transparent 22%);
         }
 
-        .hero-texto {
+        .hero-content {
             position: relative;
-            max-width: 680px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            min-height: 206px;
         }
 
-        .etiqueta {
-            display: inline-block;
-            color: #1b1207;
-            background: var(--dorado);
-            padding: 8px 12px;
+        .chip-main {
+            width: fit-content;
+            color: #241507;
+            background: var(--gold);
             border-radius: 999px;
-            font-size: 13px;
+            padding: 7px 11px;
+            font-size: 12px;
             font-weight: bold;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         h1 {
-            font-size: clamp(40px, 7vw, 78px);
+            font-size: 46px;
             line-height: 0.95;
-            margin-bottom: 14px;
+            letter-spacing: 0;
+            margin-bottom: 10px;
         }
 
         .hero p {
-            color: #fff0c9;
-            font-size: 18px;
-            max-width: 560px;
+            max-width: 310px;
+            color: #fff0c6;
+            line-height: 1.45;
         }
 
-        .acciones {
+        .search {
+            margin: 18px 0 14px;
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 22px;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 15px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(14px);
         }
 
-        .boton {
+        .search input {
+            width: 100%;
             border: 0;
+            outline: 0;
+            color: var(--text);
+            background: transparent;
+            font-size: 15px;
+        }
+
+        .search input::placeholder {
+            color: #bfa87b;
+        }
+
+        .chips {
+            display: flex;
+            gap: 9px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            scrollbar-width: none;
+        }
+
+        .chips::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip {
+            flex: 0 0 auto;
+            border: 1px solid var(--line);
             border-radius: 999px;
-            padding: 13px 18px;
-            font-weight: bold;
+            padding: 10px 14px;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.06);
             cursor: pointer;
         }
 
-        .boton.principal {
-            background: var(--verde);
-            color: #10200c;
+        .chip.active {
+            color: #1c1207;
+            background: var(--green);
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(147, 243, 109, 0.22);
         }
 
-        .boton.secundario {
-            background: rgba(255, 255, 255, 0.11);
-            color: var(--texto);
-            border: 1px solid var(--borde);
-        }
-
-        .barra {
+        .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin: 22px 0;
+            gap: 10px;
+            margin: 16px 0 24px;
         }
 
-        .dato {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--borde);
+        .stat {
+            border: 1px solid var(--line);
             border-radius: 18px;
-            padding: 16px;
+            padding: 13px 10px;
+            background: rgba(255, 255, 255, 0.07);
         }
 
-        .dato strong {
+        .stat strong {
             display: block;
-            color: var(--dorado);
-            font-size: 24px;
+            color: var(--gold);
+            font-size: 21px;
+            margin-bottom: 4px;
         }
 
-        .dato span {
-            color: var(--suave);
-            font-size: 14px;
+        .stat span {
+            font-size: 12px;
         }
 
-        .titulo-seccion {
+        .section-title {
             display: flex;
             align-items: end;
             justify-content: space-between;
-            gap: 18px;
-            margin: 34px 0 16px;
+            margin-bottom: 14px;
         }
 
-        .titulo-seccion h2 {
-            font-size: 28px;
+        .section-title h2 {
+            font-size: 23px;
         }
 
-        .titulo-seccion p {
-            color: var(--suave);
-        }
-
-        .catalogo {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
+            gap: 14px;
         }
 
-        .tarjeta {
-            min-height: 290px;
-            background: linear-gradient(180deg, var(--panel-2), var(--panel));
-            border: 1px solid var(--borde);
+        .card {
+            display: grid;
+            grid-template-columns: 82px 1fr;
+            gap: 14px;
+            align-items: center;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--panel), rgba(255, 255, 255, 0.055));
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+            animation: floatIn 0.55s ease both;
+            transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 199, 91, 0.65);
+            background: linear-gradient(135deg, rgba(62, 44, 25, 0.94), rgba(255, 199, 91, 0.10));
+        }
+
+        .cover {
+            height: 82px;
             border-radius: 20px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .tarjeta:hover {
-            transform: translateY(-6px) scale(1.01);
-            border-color: var(--dorado);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-        }
-
-        .portada {
-            height: 132px;
-            border-radius: 16px;
             display: grid;
             place-items: center;
-            font-size: 54px;
-            margin-bottom: 15px;
+            font-size: 34px;
             background:
-                linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.28)),
-                repeating-linear-gradient(45deg, #f0c86a 0 18px, #c99642 18px 36px);
+                linear-gradient(140deg, rgba(255, 255, 255, 0.22), rgba(0, 0, 0, 0.18)),
+                repeating-linear-gradient(45deg, #f6c76a 0 18px, #b87934 18px 36px);
         }
 
-        .tarjeta h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
+        .card h3 {
+            font-size: 17px;
+            margin-bottom: 5px;
         }
 
-        .tarjeta p {
-            color: var(--suave);
-            font-size: 14px;
-            line-height: 1.45;
-            margin-bottom: 14px;
+        .card p {
+            font-size: 13px;
+            line-height: 1.35;
+            margin-bottom: 9px;
         }
 
         .meta {
             display: flex;
             justify-content: space-between;
+            gap: 8px;
             align-items: center;
-            gap: 10px;
         }
 
-        .plataforma {
-            color: #1c1207;
-            background: var(--dorado);
-            padding: 7px 10px;
+        .platform {
+            color: #201407;
+            background: var(--gold);
             border-radius: 999px;
-            font-size: 13px;
+            padding: 6px 9px;
+            font-size: 12px;
             font-weight: bold;
         }
 
-        .nivel {
-            color: var(--verde);
-            font-size: 13px;
+        .level {
+            color: var(--green);
+            font-size: 12px;
             font-weight: bold;
         }
 
-        footer {
-            color: var(--suave);
-            text-align: center;
-            padding: 34px 0 12px;
+        .bottom-nav {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 18px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            padding: 10px;
+            background: rgba(22, 15, 9, 0.86);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
         }
 
-        @media (max-width: 700px) {
-            nav, .titulo-seccion {
-                align-items: start;
-                flex-direction: column;
+        .nav-item {
+            border: 0;
+            border-radius: 18px;
+            padding: 9px 4px;
+            color: var(--muted);
+            background: transparent;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #1d1308;
+            background: var(--gold);
+            font-weight: bold;
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                padding: 0;
+                display: block;
             }
 
-            .hero {
-                padding: 24px;
-                min-height: 420px;
+            .phone {
+                width: 100%;
+                min-height: 100vh;
+                max-height: none;
+                border: 0;
+                border-radius: 0;
             }
 
-            .barra {
-                grid-template-columns: 1fr;
+            .screen {
+                max-height: none;
+                min-height: 100vh;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app">
-        <nav>
-            <div class="logo"><span>X</span> Backrooms Pass</div>
-            <div class="menu">
-                <a href="#catalogo">Catalogo</a>
-                <a href="#niveles">Niveles</a>
-                <a href="#popular">Popular</a>
+    <main class="phone">
+        <section class="screen">
+            <div class="topbar">
+                <div class="brand">
+                    <div class="orb">X</div>
+                    <div>
+                        <strong>Backrooms Arcade</strong><br>
+                        <small>Catalogo futurista</small>
+                    </div>
+                </div>
+                <button class="icon-btn">⌁</button>
             </div>
+
+            <section class="hero">
+                <div class="hero-content">
+                    <span class="chip-main">Nivel destacado</span>
+                    <h1>Lost Rooms</h1>
+                    <p>Explora una app de juegos con pasillos infinitos, brillo calido y estilo moderno tipo consola.</p>
+                </div>
+            </section>
+
+            <label class="search">
+                <span>⌕</span>
+                <input id="search" type="text" placeholder="Buscar juego o plataforma">
+            </label>
+
+            <div class="chips">
+                <button class="chip active" data-filter="todos">Todos</button>
+                <button class="chip" data-filter="PC">PC</button>
+                <button class="chip" data-filter="Xbox">Xbox</button>
+                <button class="chip" data-filter="PlayStation">PlayStation</button>
+                <button class="chip" data-filter="Mobile">Mobile</button>
+            </div>
+
+            <section class="stats">
+                <article class="stat"><strong>10</strong><span>juegos</span></article>
+                <article class="stat"><strong>5</strong><span>plataformas</span></article>
+                <article class="stat"><strong>∞</strong><span>niveles</span></article>
+            </section>
+
+            <div class="section-title">
+                <div>
+                    <h2>Para jugar ahora</h2>
+                    <span>Seleccion Backrooms</span>
+                </div>
+                <span id="count">10</span>
+            </div>
+
+            <section class="grid" id="grid">
+                <article class="card" data-platform="PC" data-name="Escape the Backrooms">
+                    <div class="cover">🟨</div>
+                    <div>
+                        <h3>Escape the Backrooms</h3>
+                        <p>Pasillos amarillos, rutas secretas y una salida casi imposible.</p>
+                        <div class="meta"><span class="platform">PC</span><span class="level">Nivel 0</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="Xbox" data-name="Inside the Rooms">
+                    <div class="cover">🚪</div>
+                    <div>
+                        <h3>Inside the Rooms</h3>
+                        <p>Habitaciones repetidas con pistas ocultas y ambiente misterioso.</p>
+                        <div class="meta"><span class="platform">Xbox</span><span class="level">Nivel 1</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="PlayStation" data-name="VHS Hallways">
+                    <div class="cover">📼</div>
+                    <div>
+                        <h3>VHS Hallways</h3>
+                        <p>Exploracion con efecto cinta antigua y luces fluorescentes.</p>
+                        <div class="meta"><span class="platform">PlayStation</span><span class="level">Nivel 2</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="Xbox" data-name="Fluorescent Maze">
+                    <div class="cover">💡</div>
+                    <div>
+                        <h3>Fluorescent Maze</h3>
+                        <p>Laberintos calidos con paredes que parecen cambiar de lugar.</p>
+                        <div class="meta"><span class="platform">Xbox</span><span class="level">Nivel 3</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="PC" data-name="Level Elevator">
+                    <div class="cover">🛗</div>
+                    <div>
+                        <h3>Level Elevator</h3>
+                        <p>Sube por niveles nuevos y desbloquea puertas imposibles.</p>
+                        <div class="meta"><span class="platform">PC</span><span class="level">Nivel 4</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="Xbox" data-name="No Clip Runner">
+                    <div class="cover">🧭</div>
+                    <div>
+                        <h3>No Clip Runner</h3>
+                        <p>Corre contra el tiempo atravesando zonas fuera de la realidad.</p>
+                        <div class="meta"><span class="platform">Xbox</span><span class="level">Nivel 5</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="Mobile" data-name="Warm Liminal">
+                    <div class="cover">🟧</div>
+                    <div>
+                        <h3>Warm Liminal</h3>
+                        <p>Salas vacias, color dorado y sonidos suaves de fondo.</p>
+                        <div class="meta"><span class="platform">Mobile</span><span class="level">Nivel 6</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="PC" data-name="Hotel Endless">
+                    <div class="cover">🕯️</div>
+                    <div>
+                        <h3>Hotel Endless</h3>
+                        <p>Un hotel infinito con alfombras viejas y pasillos elegantes.</p>
+                        <div class="meta"><span class="platform">PC</span><span class="level">Nivel 7</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="PlayStation" data-name="Signal Lost">
+                    <div class="cover">📡</div>
+                    <div>
+                        <h3>Signal Lost</h3>
+                        <p>Busca senales de radio para encontrar rutas escondidas.</p>
+                        <div class="meta"><span class="platform">PlayStation</span><span class="level">Nivel 8</span></div>
+                    </div>
+                </article>
+
+                <article class="card" data-platform="Xbox" data-name="The Last Exit">
+                    <div class="cover">🕳️</div>
+                    <div>
+                        <h3>The Last Exit</h3>
+                        <p>La ultima salida esta cerca, pero el mapa ya no responde.</p>
+                        <div class="meta"><span class="platform">Xbox</span><span class="level">Final</span></div>
+                    </div>
+                </article>
+            </section>
+        </section>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active">Inicio</button>
+            <button class="nav-item">Buscar</button>
+            <button class="nav-item">Niveles</button>
+            <button class="nav-item">Perfil</button>
         </nav>
+    </main>
 
-        <header class="hero">
-            <div class="hero-texto">
-                <span class="etiqueta">Nuevo en el catalogo</span>
-                <h1>Backrooms Arcade</h1>
-                <p>Una biblioteca de juegos inspirada en pasillos infinitos, luces amarillas y niveles misteriosos. Estilo consola moderna, pero con vibra calida y liminal.</p>
-                <div class="acciones">
-                    <button class="boton principal">Explorar juegos</button>
-                    <button class="boton secundario">Ver niveles</button>
-                </div>
-            </div>
-        </header>
+    <script>
+        const search = document.querySelector('#search');
+        const chips = document.querySelectorAll('.chip');
+        const cards = document.querySelectorAll('.card');
+        const count = document.querySelector('#count');
+        let activeFilter = 'todos';
 
-        <section class="barra" id="niveles">
-            <div class="dato">
-                <strong>10</strong>
-                <span>juegos disponibles</span>
-            </div>
-            <div class="dato">
-                <strong>5</strong>
-                <span>plataformas distintas</span>
-            </div>
-            <div class="dato">
-                <strong>24/7</strong>
-                <span>modo exploracion</span>
-            </div>
-        </section>
+        function updateCards() {
+            const text = search.value.toLowerCase();
+            let visible = 0;
 
-        <section class="titulo-seccion" id="catalogo">
-            <div>
-                <h2>Catalogo destacado</h2>
-                <p>Tarjetas con titulo, plataforma e imagen representativa.</p>
-            </div>
-            <p id="popular">Seleccion tipo Game Pass</p>
-        </section>
+            cards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const platform = card.dataset.platform;
+                const matchesText = name.includes(text) || platform.toLowerCase().includes(text);
+                const matchesFilter = activeFilter === 'todos' || platform === activeFilter;
+                const show = matchesText && matchesFilter;
 
-        <main class="catalogo">
-            <article class="tarjeta">
-                <div class="portada">🟨</div>
-                <div>
-                    <h3>Escape the Backrooms</h3>
-                    <p>Explora pasillos amarillos, resuelve rutas y encuentra la salida antes de perderte.</p>
-                </div>
-                <div class="meta"><span class="plataforma">PC</span><span class="nivel">Nivel 0</span></div>
-            </article>
+                card.style.display = show ? 'grid' : 'none';
+                if (show) visible++;
+            });
 
-            <article class="tarjeta">
-                <div class="portada">🚪</div>
-                <div>
-                    <h3>Inside the Rooms</h3>
-                    <p>Un juego de suspenso con habitaciones repetidas y secretos escondidos.</p>
-                </div>
-                <div class="meta"><span class="plataforma">Xbox</span><span class="nivel">Nivel 1</span></div>
-            </article>
+            count.textContent = visible;
+        }
 
-            <article class="tarjeta">
-                <div class="portada">📼</div>
-                <div>
-                    <h3>VHS Hallways</h3>
-                    <p>Camina por escenarios con estilo cinta antigua y ambiente inquietante.</p>
-                </div>
-                <div class="meta"><span class="plataforma">PlayStation</span><span class="nivel">Nivel 2</span></div>
-            </article>
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(item => item.classList.remove('active'));
+                chip.classList.add('active');
+                activeFilter = chip.dataset.filter;
+                updateCards();
+            });
+        });
 
-            <article class="tarjeta">
-                <div class="portada">💡</div>
-                <div>
-                    <h3>Fluorescent Maze</h3>
-                    <p>Laberintos iluminados por tubos fluorescentes y rutas que cambian.</p>
-                </div>
-                <div class="meta"><span class="plataforma">Nintendo</span><span class="nivel">Nivel 3</span></div>
-            </article>
-
-            <article class="tarjeta">
-                <div class="portada">🛗</div>
-                <div>
-                    <h3>Level Elevator</h3>
-                    <p>Sube por niveles desconocidos y desbloquea nuevas zonas del edificio.</p>
-                </div>
-                <div class="meta"><span class="plataforma">PC</span><span class="nivel">Nivel 4</span></div>
-            </article>
-
-            <article class="tarjeta">
-                <div class="portada">🧭</div>
-                <div>
-                    <h3>No Clip Runner</h3>
-                    <p>Corre, salta y atraviesa paredes en una carrera contra el tiempo.</p>
-                </div>
-                <div class="meta"><span class="plataforma">Xbox</span><span class="nivel">Nivel 5</span></div>
-            </article>
-
-            <article class="tarjeta">
-                <div class="portada">🟧</div>
-                <div>
-                    <h3>Warm Liminal</h3>
-                    <p>Un juego de exploracion con tonos dorados, salas vacias y musica suave.</p>
-                </div>
-                <div class="meta"><span class="plataforma">Mobile</span><span class="nivel">Nivel 6</span></div>
-            </article>
-
-            <article class="tarjeta">
-                <div class="portada">🕯️</div>
-                <div>
-                    <h3>Hotel Endless</h3>
-                    <p>Recorre un hotel infinito lleno de puertas, alfombras y pistas escondidas.</p>
-                </div>
-                <div class="meta"><span class="plataforma">PC</span><span class="nivel">Nivel 7</span></div>
-            </article>
-
-            <article class="tarjeta">
-                <div class="portada">📡</div>
-                <div>
-                    <h3>Signal Lost</h3>
-                    <p>Encuentra senales de radio para ubicar salidas en zonas abandonadas.</p>
-                </div>
-                <div class="meta"><span class="plataforma">PlayStation</span><span class="nivel">Nivel 8</span></div>
-            </article>
-
-            <article class="tarjeta">
-                <div class="portada">🕳️</div>
-                <div>
-                    <h3>The Last Exit</h3>
-                    <p>La aventura final: busca la salida real entre pasillos que no terminan.</p>
-                </div>
-                <div class="meta"><span class="plataforma">Xbox</span><span class="nivel">Final</span></div>
-            </article>
-        </main>
-
-        <footer>
-            <p>Catalogo web inspirado en Backrooms y tiendas modernas de videojuegos.</p>
-        </footer>
-    </div>
+        search.addEventListener('input', updateCards);
+    </script>
 </body>
 </html>
