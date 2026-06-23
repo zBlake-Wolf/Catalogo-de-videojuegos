@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo de Videojuegos</title>
+    <title>Backrooms Game Pass</title>
     <style>
         :root {
-            --fondo: #101418;
-            --tarjeta: #1b2229;
-            --tarjeta-secundaria: #24303a;
-            --texto: #f4f7fb;
-            --texto-suave: #b7c3cf;
-            --acento: #f4c542;
-            --acento-2: #4fb286;
-            --borde: #33414d;
+            --fondo: #130f0a;
+            --panel: #21180f;
+            --panel-2: #332617;
+            --texto: #fff8e8;
+            --suave: #d8c49d;
+            --dorado: #f3bd58;
+            --verde: #7fd36b;
+            --naranja: #d96d2f;
+            --borde: rgba(255, 216, 142, 0.18);
         }
 
         * {
@@ -25,177 +26,414 @@
         body {
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
-            background: var(--fondo);
             color: var(--texto);
+            background:
+                linear-gradient(rgba(19, 15, 10, 0.88), rgba(19, 15, 10, 0.96)),
+                repeating-linear-gradient(90deg, #2a2114 0 22px, #332817 22px 44px);
         }
 
-        header {
-            max-width: 1100px;
+        .app {
+            max-width: 1180px;
             margin: 0 auto;
-            padding: 36px 20px 18px;
+            padding: 22px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--verde);
+            color: #10200c;
+            font-weight: bold;
+        }
+
+        .menu {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .menu a {
+            color: var(--suave);
+            text-decoration: none;
+            padding: 9px 13px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .hero {
+            min-height: 360px;
+            border: 1px solid var(--borde);
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: end;
+            padding: 34px;
+            background:
+                linear-gradient(120deg, rgba(19, 15, 10, 0.25), rgba(19, 15, 10, 0.92)),
+                repeating-linear-gradient(0deg, rgba(255, 221, 134, 0.18) 0 2px, transparent 2px 42px),
+                repeating-linear-gradient(90deg, #c89a47 0 90px, #dfb55e 90px 180px);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 18% 30%, rgba(255, 247, 196, 0.55), transparent 18%),
+                radial-gradient(circle at 70% 18%, rgba(255, 222, 117, 0.28), transparent 22%),
+                linear-gradient(90deg, transparent 0 18%, rgba(50, 38, 22, 0.5) 18% 19%, transparent 19% 52%, rgba(50, 38, 22, 0.5) 52% 53%, transparent 53%);
+        }
+
+        .hero-texto {
+            position: relative;
+            max-width: 680px;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            color: #1b1207;
+            background: var(--dorado);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 14px;
         }
 
         h1 {
-            font-size: 34px;
-            margin-bottom: 8px;
+            font-size: clamp(40px, 7vw, 78px);
+            line-height: 0.95;
+            margin-bottom: 14px;
         }
 
-        header p {
-            color: var(--texto-suave);
-            font-size: 17px;
+        .hero p {
+            color: #fff0c9;
+            font-size: 18px;
+            max-width: 560px;
         }
 
-        main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 12px 20px 40px;
+        .acciones {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .boton {
+            border: 0;
+            border-radius: 999px;
+            padding: 13px 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .boton.principal {
+            background: var(--verde);
+            color: #10200c;
+        }
+
+        .boton.secundario {
+            background: rgba(255, 255, 255, 0.11);
+            color: var(--texto);
+            border: 1px solid var(--borde);
+        }
+
+        .barra {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin: 22px 0;
+        }
+
+        .dato {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--borde);
+            border-radius: 18px;
+            padding: 16px;
+        }
+
+        .dato strong {
+            display: block;
+            color: var(--dorado);
+            font-size: 24px;
+        }
+
+        .dato span {
+            color: var(--suave);
+            font-size: 14px;
+        }
+
+        .titulo-seccion {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 18px;
+            margin: 34px 0 16px;
+        }
+
+        .titulo-seccion h2 {
+            font-size: 28px;
+        }
+
+        .titulo-seccion p {
+            color: var(--suave);
         }
 
         .catalogo {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 18px;
         }
 
         .tarjeta {
-            background: var(--tarjeta);
+            min-height: 290px;
+            background: linear-gradient(180deg, var(--panel-2), var(--panel));
             border: 1px solid var(--borde);
-            border-radius: 22px 8px 22px 8px;
-            padding: 18px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-            transition: transform 0.25s ease, border-color 0.25s ease;
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
         .tarjeta:hover {
-            transform: translateY(-5px);
-            border-color: var(--acento);
+            transform: translateY(-6px) scale(1.01);
+            border-color: var(--dorado);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
         }
 
-        .imagen {
-            height: 130px;
+        .portada {
+            height: 132px;
             border-radius: 16px;
-            background: var(--tarjeta-secundaria);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 56px;
-            margin-bottom: 16px;
+            display: grid;
+            place-items: center;
+            font-size: 54px;
+            margin-bottom: 15px;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.28)),
+                repeating-linear-gradient(45deg, #f0c86a 0 18px, #c99642 18px 36px);
         }
 
-        .tarjeta h2 {
+        .tarjeta h3 {
             font-size: 20px;
-            line-height: 1.25;
-            margin-bottom: 10px;
-        }
-
-        .plataforma {
-            display: inline-block;
-            color: #102018;
-            background: var(--acento);
-            border-radius: 999px;
-            padding: 7px 12px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .numero {
-            color: var(--acento-2);
-            font-size: 14px;
-            font-weight: bold;
             margin-bottom: 8px;
         }
 
+        .tarjeta p {
+            color: var(--suave);
+            font-size: 14px;
+            line-height: 1.45;
+            margin-bottom: 14px;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plataforma {
+            color: #1c1207;
+            background: var(--dorado);
+            padding: 7px 10px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .nivel {
+            color: var(--verde);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
         footer {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px 28px;
-            color: var(--texto-suave);
+            color: var(--suave);
             text-align: center;
+            padding: 34px 0 12px;
+        }
+
+        @media (max-width: 700px) {
+            nav, .titulo-seccion {
+                align-items: start;
+                flex-direction: column;
+            }
+
+            .hero {
+                padding: 24px;
+                min-height: 420px;
+            }
+
+            .barra {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Catalogo de Videojuegos</h1>
-        <p>Lista de 10 juegos con titulo, plataforma e imagen representativa.</p>
-    </header>
+    <div class="app">
+        <nav>
+            <div class="logo"><span>X</span> Backrooms Pass</div>
+            <div class="menu">
+                <a href="#catalogo">Catalogo</a>
+                <a href="#niveles">Niveles</a>
+                <a href="#popular">Popular</a>
+            </div>
+        </nav>
 
-    <main>
-        <section class="catalogo">
-            <article class="tarjeta">
-                <div class="imagen">🎮</div>
-                <p class="numero">Juego 01</p>
-                <h2>The Legend of Zelda: Tears of the Kingdom</h2>
-                <span class="plataforma">Nintendo Switch</span>
-            </article>
+        <header class="hero">
+            <div class="hero-texto">
+                <span class="etiqueta">Nuevo en el catalogo</span>
+                <h1>Backrooms Arcade</h1>
+                <p>Una biblioteca de juegos inspirada en pasillos infinitos, luces amarillas y niveles misteriosos. Estilo consola moderna, pero con vibra calida y liminal.</p>
+                <div class="acciones">
+                    <button class="boton principal">Explorar juegos</button>
+                    <button class="boton secundario">Ver niveles</button>
+                </div>
+            </div>
+        </header>
 
-            <article class="tarjeta">
-                <div class="imagen">⚔️</div>
-                <p class="numero">Juego 02</p>
-                <h2>God of War Ragnarok</h2>
-                <span class="plataforma">PlayStation 5</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">🚀</div>
-                <p class="numero">Juego 03</p>
-                <h2>Halo Infinite</h2>
-                <span class="plataforma">Xbox Series X/S</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">⛏️</div>
-                <p class="numero">Juego 04</p>
-                <h2>Minecraft</h2>
-                <span class="plataforma">PC</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">🌾</div>
-                <p class="numero">Juego 05</p>
-                <h2>Stardew Valley</h2>
-                <span class="plataforma">Nintendo Switch</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">🏎️</div>
-                <p class="numero">Juego 06</p>
-                <h2>Forza Horizon 5</h2>
-                <span class="plataforma">Xbox Series X/S</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">🕸️</div>
-                <p class="numero">Juego 07</p>
-                <h2>Marvel's Spider-Man 2</h2>
-                <span class="plataforma">PlayStation 5</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">🍄</div>
-                <p class="numero">Juego 08</p>
-                <h2>Super Mario Odyssey</h2>
-                <span class="plataforma">Nintendo Switch</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">🔥</div>
-                <p class="numero">Juego 09</p>
-                <h2>Hades</h2>
-                <span class="plataforma">PC</span>
-            </article>
-
-            <article class="tarjeta">
-                <div class="imagen">🏝️</div>
-                <p class="numero">Juego 10</p>
-                <h2>Animal Crossing: New Horizons</h2>
-                <span class="plataforma">Nintendo Switch</span>
-            </article>
+        <section class="barra" id="niveles">
+            <div class="dato">
+                <strong>10</strong>
+                <span>juegos disponibles</span>
+            </div>
+            <div class="dato">
+                <strong>5</strong>
+                <span>plataformas distintas</span>
+            </div>
+            <div class="dato">
+                <strong>24/7</strong>
+                <span>modo exploracion</span>
+            </div>
         </section>
-    </main>
 
-    <footer>
-        <p>Trabajo: Catalogo de Videojuegos</p>
-    </footer>
+        <section class="titulo-seccion" id="catalogo">
+            <div>
+                <h2>Catalogo destacado</h2>
+                <p>Tarjetas con titulo, plataforma e imagen representativa.</p>
+            </div>
+            <p id="popular">Seleccion tipo Game Pass</p>
+        </section>
+
+        <main class="catalogo">
+            <article class="tarjeta">
+                <div class="portada">🟨</div>
+                <div>
+                    <h3>Escape the Backrooms</h3>
+                    <p>Explora pasillos amarillos, resuelve rutas y encuentra la salida antes de perderte.</p>
+                </div>
+                <div class="meta"><span class="plataforma">PC</span><span class="nivel">Nivel 0</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">🚪</div>
+                <div>
+                    <h3>Inside the Rooms</h3>
+                    <p>Un juego de suspenso con habitaciones repetidas y secretos escondidos.</p>
+                </div>
+                <div class="meta"><span class="plataforma">Xbox</span><span class="nivel">Nivel 1</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">📼</div>
+                <div>
+                    <h3>VHS Hallways</h3>
+                    <p>Camina por escenarios con estilo cinta antigua y ambiente inquietante.</p>
+                </div>
+                <div class="meta"><span class="plataforma">PlayStation</span><span class="nivel">Nivel 2</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">💡</div>
+                <div>
+                    <h3>Fluorescent Maze</h3>
+                    <p>Laberintos iluminados por tubos fluorescentes y rutas que cambian.</p>
+                </div>
+                <div class="meta"><span class="plataforma">Nintendo</span><span class="nivel">Nivel 3</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">🛗</div>
+                <div>
+                    <h3>Level Elevator</h3>
+                    <p>Sube por niveles desconocidos y desbloquea nuevas zonas del edificio.</p>
+                </div>
+                <div class="meta"><span class="plataforma">PC</span><span class="nivel">Nivel 4</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">🧭</div>
+                <div>
+                    <h3>No Clip Runner</h3>
+                    <p>Corre, salta y atraviesa paredes en una carrera contra el tiempo.</p>
+                </div>
+                <div class="meta"><span class="plataforma">Xbox</span><span class="nivel">Nivel 5</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">🟧</div>
+                <div>
+                    <h3>Warm Liminal</h3>
+                    <p>Un juego de exploracion con tonos dorados, salas vacias y musica suave.</p>
+                </div>
+                <div class="meta"><span class="plataforma">Mobile</span><span class="nivel">Nivel 6</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">🕯️</div>
+                <div>
+                    <h3>Hotel Endless</h3>
+                    <p>Recorre un hotel infinito lleno de puertas, alfombras y pistas escondidas.</p>
+                </div>
+                <div class="meta"><span class="plataforma">PC</span><span class="nivel">Nivel 7</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">📡</div>
+                <div>
+                    <h3>Signal Lost</h3>
+                    <p>Encuentra senales de radio para ubicar salidas en zonas abandonadas.</p>
+                </div>
+                <div class="meta"><span class="plataforma">PlayStation</span><span class="nivel">Nivel 8</span></div>
+            </article>
+
+            <article class="tarjeta">
+                <div class="portada">🕳️</div>
+                <div>
+                    <h3>The Last Exit</h3>
+                    <p>La aventura final: busca la salida real entre pasillos que no terminan.</p>
+                </div>
+                <div class="meta"><span class="plataforma">Xbox</span><span class="nivel">Final</span></div>
+            </article>
+        </main>
+
+        <footer>
+            <p>Catalogo web inspirado en Backrooms y tiendas modernas de videojuegos.</p>
+        </footer>
+    </div>
 </body>
 </html>
