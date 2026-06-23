@@ -1,11 +1,14 @@
-﻿# Catalogo de Videojuegos
+﻿# Backrooms Game Pass
 
-Proyecto hecho en HTML y CSS para mostrar un catalogo de 10 videojuegos.
+Pagina web hecha con HTML y CSS sencillo.
 
-## Archivos principales
+## Incluye
 
-- `index.html`: pagina principal del catalogo.
+- Estilo inspirado en catalogos modernos de consola.
+- Tema visual tipo Backrooms con tonos calidos.
+- 10 tarjetas de videojuegos con titulo, plataforma e imagen representativa.
+- Diseno responsive para computadora y celular.
 
-## Como verlo
+## Archivo principal
 
-Abre `index.html` en el navegador o sube el proyecto a GitHub Pages.
+- `index.html`
